@@ -251,47 +251,45 @@
     /* NEVER use --tm-happy-yellow as text color on light bg — fails WCAG 1.4:1 */
   }
 
-  /* ── Modal: in-app placeholder (hidden, moved to <body> on open) ── */
-  #pathways-app #pathways-modal-backdrop[hidden] { display: none; }
+  /* (modal styles live in the standalone block below) */
 </style>
 
-<!-- ── Modal CSS: standalone — no #pathways-app parent required ──
-     The modal is appended to <body> at open time to escape any FTH
-     ancestor transform/filter stacking context that prevents
-     position:fixed from covering the full viewport.              -->
+<!-- ── Modal CSS: <dialog> top-layer — immune to all FTH stacking contexts ──
+     The native <dialog> element renders in the browser top layer, which sits
+     above every CSS transform/filter/z-index in the page. No FTH ancestor
+     can clip or constrain it. ::backdrop covers the full viewport always.  -->
 <style>
-  #pathways-modal-backdrop {
+  /* Bottom-sheet dialog */
+  #pathways-modal {
+    border: none;
+    outline: none;
+    margin: 0;
+    padding: 1rem 1rem 1.5rem;
+    /* Pin to bottom of viewport */
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.55);
-    z-index: 99999; /* above all FTH chrome */
-    display: flex;
-    align-items: flex-end;
-    cursor: pointer;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100vw;
+    max-height: 60vh;
+    background: white;
+    border-radius: 12px 12px 0 0;
+    overflow-y: auto;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
     box-sizing: border-box;
     font-family: 'Source Sans 3', 'Segoe UI', Arial, sans-serif;
     font-size: 16px;
   }
-  #pathways-modal-backdrop[hidden] { display: none; }
-
-  #pathways-modal-sheet {
-    background: white;
-    width: 100%;
-    max-height: 60vh;
-    border-radius: 12px 12px 0 0;
-    overflow-y: auto;
-    padding: 1rem 1rem 1.5rem;
-    cursor: default;
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
-    position: relative;
-    box-sizing: border-box;
+  #pathways-modal::backdrop {
+    background: rgba(0,0,0,0.55);
   }
-  .pa-modal-close-btn {
+  /* Close button */
+  #pathways-modal .pa-modal-close-btn {
     position: absolute;
     top: 0.75rem;
     right: 0.75rem;
-    width: 32px;
-    height: 32px;
+    width: 32px; height: 32px;
     border: none;
     background: none;
     cursor: pointer;
@@ -303,16 +301,17 @@
     border-radius: 50%;
     padding: 0;
     line-height: 1;
-    box-sizing: border-box;
   }
-  .pa-modal-close-btn:hover { background: #f0f0f0; color: #333; }
-  .pa-modal-handle {
+  #pathways-modal .pa-modal-close-btn:hover { background: #f0f0f0; color: #333; }
+  /* Drag handle */
+  #pathways-modal .pa-modal-handle {
     width: 40px; height: 4px;
     background: #ccc;
     border-radius: 2px;
     margin: 0 auto 0.75rem;
   }
-  .pa-modal-header {
+  /* Header row */
+  #pathways-modal .pa-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -321,14 +320,15 @@
     padding-right: 1.5rem;
     box-sizing: border-box;
   }
-  .pa-modal-title {
+  #pathways-modal .pa-modal-title {
     font-family: 'Montserrat', 'Gotham', Arial, sans-serif;
     font-weight: 700;
     font-size: 1rem;
     color: #004165;
     margin: 0;
   }
-  .pa-modal-section-label {
+  /* Section labels */
+  #pathways-modal .pa-modal-section-label {
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -336,14 +336,10 @@
     color: #888;
     margin: 0.75rem 0 0.25rem;
   }
-  .pa-modal-time  { font-size: 0.875rem; color: #555; margin: 0.25rem 0 0.5rem; }
-  .pa-modal-purpose {
-    font-size: 0.9375rem;
-    color: #333;
-    line-height: 1.5;
-    margin: 0 0 1rem;
-  }
-  .pa-modal-btn {
+  #pathways-modal .pa-modal-time    { font-size: 0.875rem; color: #555; margin: 0.25rem 0 0.5rem; }
+  #pathways-modal .pa-modal-purpose { font-size: 0.9375rem; color: #333; line-height: 1.5; margin: 0 0 1rem; }
+  /* Download buttons */
+  #pathways-modal .pa-modal-btn {
     display: block;
     width: 100%;
     padding: 0.75rem 1rem;
@@ -360,12 +356,12 @@
     margin-bottom: 0.5rem;
     box-sizing: border-box;
   }
-  .pa-modal-btn:last-child  { margin-bottom: 0; }
-  .pa-modal-btn:hover       { background: #005a8e; }
-  .pa-modal-btn-generic     { background: #555; }
-  .pa-modal-btn-generic:hover { background: #333; }
-  /* Badge styles re-declared for use inside the modal (outside #pathways-app) */
-  #pathways-modal-sheet .badge {
+  #pathways-modal .pa-modal-btn:last-child  { margin-bottom: 0; }
+  #pathways-modal .pa-modal-btn:hover       { background: #005a8e; }
+  #pathways-modal .pa-modal-btn-generic     { background: #555; }
+  #pathways-modal .pa-modal-btn-generic:hover { background: #333; }
+  /* Badges inside dialog */
+  #pathways-modal .badge {
     display: inline-block;
     padding: 0.25rem 0.5rem;
     border-radius: 3px;
@@ -375,10 +371,9 @@
     text-transform: uppercase;
     white-space: nowrap;
     flex-shrink: 0;
-    box-sizing: border-box;
   }
-  #pathways-modal-sheet .badge-required { background: #004165; color: #ffffff; }
-  #pathways-modal-sheet .badge-elective { background: #F2DF74; color: #000000; }
+  #pathways-modal .badge-required { background: #004165; color: #ffffff; }
+  #pathways-modal .badge-elective { background: #F2DF74; color: #000000; }
 
   /* ── FAB — viewport-fixed, outside #pathways-app ─────── */
   #pathways-fab {
@@ -433,15 +428,13 @@
     </div>
   </div>
 
-  <!-- Modal: bottom sheet — hidden until a project card is clicked -->
-  <div id="pathways-modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="pathways-modal-title">
-    <div id="pathways-modal-sheet">
-      <button id="pathways-modal-close" class="pa-modal-close-btn" aria-label="Close">&times;</button>
-      <div id="pathways-modal-content"><!-- populated by JS --></div>
-    </div>
-  </div>
-
 </div>
+
+<!-- Modal: <dialog> renders in browser top layer — above all FTH stacking contexts -->
+<dialog id="pathways-modal" aria-labelledby="pathways-modal-title">
+  <button id="pathways-modal-close" class="pa-modal-close-btn" aria-label="Close">&times;</button>
+  <div id="pathways-modal-content"><!-- populated by JS --></div>
+</dialog>
 
 <!-- FAB outside #pathways-app (needs viewport-relative fixed position) -->
 <button id="pathways-fab" hidden aria-label="Back to top">&#8679;</button>
@@ -993,30 +986,27 @@
       + '<p class="pa-modal-section-label">Evaluation Resources</p>'
       + btnsHTML;
 
-    var bd = document.getElementById('pathways-modal-backdrop');
-    /* Move to <body> so position:fixed covers the full viewport,
-       not just the FTH content column (FTH ancestor has transform/stacking context) */
-    if (bd.parentNode !== document.body) {
-      document.body.appendChild(bd);
-    }
-    bd.removeAttribute('hidden');
+    /* <dialog>.showModal() opens in browser top layer — full viewport, above all FTH chrome */
+    document.getElementById('pathways-modal').showModal();
   }
-
-  /* X close button — re-query after potential DOM move */
-  document.getElementById('pathways-modal-close').addEventListener('click', closeModal);
 
   function closeModal() {
-    document.getElementById('pathways-modal-backdrop').setAttribute('hidden', '');
+    document.getElementById('pathways-modal').close();
   }
 
-  /* Close on backdrop click (not sheet click) */
-  document.getElementById('pathways-modal-backdrop').addEventListener('click', function(e) {
+  /* X button */
+  document.getElementById('pathways-modal-close').addEventListener('click', closeModal);
+
+  /* Click on ::backdrop area closes the dialog.
+     Backdrop clicks arrive as click events on the <dialog> itself with target === dialog. */
+  document.getElementById('pathways-modal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
 
-  /* Close on Escape */
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeModal();
+  /* Escape key: dialog fires 'cancel' natively; prevent default close then call closeModal */
+  document.getElementById('pathways-modal').addEventListener('cancel', function(e) {
+    e.preventDefault();
+    closeModal();
   });
 
   /* Project card click + keyboard (Enter/Space) — event delegation on content pane */
