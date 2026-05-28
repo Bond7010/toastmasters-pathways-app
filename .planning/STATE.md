@@ -49,8 +49,17 @@ None.
 
 ### Blockers/Concerns
 
-- **FTH script-tag test**: Must be done as the first task of Phase 1 before writing real code (C-1 pitfall).
 - **Basic Training level names**: Level 1 is "Introduction to Basic Training"; Levels 2–5 names unknown — will need Base Camp verification in Phase 2. Using "Level 2" etc. as placeholders.
+
+### Quick Tasks Completed
+
+| # | Description | Date | Directory |
+|---|-------------|------|-----------|
+| 260528 | Add local FTH platform reference doc | 2026-05-28 | [260528-fth-local-reference](./.planning/quick/260528-fth-local-reference/) |
+
+### Resolved
+
+- **FTH script-tag test** ✓ — PASSED 2026-05-28. https://4039.toastmastersclubs.org/fth-test.html displays "JavaScript ran successfully." See `.planning/research/FTH.md`.
 
 ### Basic Training Structure (confirmed 2026-05-27)
 Level grouping: L1=Speeches 1-2 + Table Topic Chairperson role; L2=Toastmaster of Evening role + Speeches 3-4; L3=Speeches 5-6 + Critic/Evaluator role + "Take Your Measure Again" self-eval; L4=Speeches 7-9; L5=Speeches 10-12.
@@ -58,6 +67,6 @@ Meeting roles and self-evaluations appear as Required items within levels (no se
 
 ## Session Continuity
 
-Last session: 2026-05-27
-Stopped at: Project initialized. REQUIREMENTS.md and ROADMAP.md created. Ready to plan Phase 1.
+Last session: 2026-05-28
+Stopped at: FTH gate test confirmed PASSED. Local FTH reference created. Ready to execute Phase 1 Plan 01-01 Task 2 (HTML shell).
 Resume file: None
