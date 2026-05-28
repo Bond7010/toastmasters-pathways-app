@@ -251,33 +251,45 @@
     /* NEVER use --tm-happy-yellow as text color on light bg — fails WCAG 1.4:1 */
   }
 
-  /* ── Modal backdrop (bottom sheet) ──────────────────── */
-  #pathways-app #pathways-modal-backdrop {
+  /* ── Modal: in-app placeholder (hidden, moved to <body> on open) ── */
+  #pathways-app #pathways-modal-backdrop[hidden] { display: none; }
+</style>
+
+<!-- ── Modal CSS: standalone — no #pathways-app parent required ──
+     The modal is appended to <body> at open time to escape any FTH
+     ancestor transform/filter stacking context that prevents
+     position:fixed from covering the full viewport.              -->
+<style>
+  #pathways-modal-backdrop {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 10000;
+    background: rgba(0,0,0,0.55);
+    z-index: 99999; /* above all FTH chrome */
     display: flex;
     align-items: flex-end;
-    cursor: pointer; /* click outside sheet to close */
+    cursor: pointer;
+    box-sizing: border-box;
+    font-family: 'Source Sans 3', 'Segoe UI', Arial, sans-serif;
+    font-size: 16px;
   }
-  #pathways-app #pathways-modal-backdrop[hidden] { display: none; }
+  #pathways-modal-backdrop[hidden] { display: none; }
 
-  #pathways-app #pathways-modal-sheet {
+  #pathways-modal-sheet {
     background: white;
     width: 100%;
     max-height: 60vh;
     border-radius: 12px 12px 0 0;
     overflow-y: auto;
-    padding: var(--space-4) var(--space-4) var(--space-6);
+    padding: 1rem 1rem 1.5rem;
     cursor: default;
     box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
-    position: relative; /* anchor for the X close button */
+    position: relative;
+    box-sizing: border-box;
   }
-  #pathways-app .pa-modal-close-btn {
+  .pa-modal-close-btn {
     position: absolute;
-    top: var(--space-3);
-    right: var(--space-3);
+    top: 0.75rem;
+    right: 0.75rem;
     width: 32px;
     height: 32px;
     border: none;
@@ -291,71 +303,82 @@
     border-radius: 50%;
     padding: 0;
     line-height: 1;
+    box-sizing: border-box;
   }
-  #pathways-app .pa-modal-close-btn:hover { background: #f0f0f0; color: #333; }
-  #pathways-app .pa-modal-handle {
-    width: 40px;
-    height: 4px;
+  .pa-modal-close-btn:hover { background: #f0f0f0; color: #333; }
+  .pa-modal-handle {
+    width: 40px; height: 4px;
     background: #ccc;
     border-radius: 2px;
-    margin: 0 auto var(--space-3);
+    margin: 0 auto 0.75rem;
   }
-  #pathways-app .pa-modal-header {
+  .pa-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: var(--space-2);
-    margin-bottom: var(--space-1);
-    padding-right: var(--space-6); /* keep title clear of the X button */
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+    padding-right: 1.5rem;
+    box-sizing: border-box;
   }
-  #pathways-app .pa-modal-title {
-    font-family: var(--tm-font-headline);
+  .pa-modal-title {
+    font-family: 'Montserrat', 'Gotham', Arial, sans-serif;
     font-weight: 700;
     font-size: 1rem;
-    color: var(--tm-loyal-blue);
+    color: #004165;
     margin: 0;
   }
-  #pathways-app .pa-modal-section-label {
+  .pa-modal-section-label {
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.07em;
     color: #888;
-    margin: var(--space-3) 0 var(--space-1);
+    margin: 0.75rem 0 0.25rem;
   }
-  #pathways-app .pa-modal-time {
-    font-size: 0.875rem;
-    color: #555;
-    margin: var(--space-1) 0 var(--space-2);
-  }
-  #pathways-app .pa-modal-purpose {
+  .pa-modal-time  { font-size: 0.875rem; color: #555; margin: 0.25rem 0 0.5rem; }
+  .pa-modal-purpose {
     font-size: 0.9375rem;
     color: #333;
     line-height: 1.5;
-    margin: 0 0 var(--space-4);
+    margin: 0 0 1rem;
   }
-  #pathways-app .pa-modal-btn {
+  .pa-modal-btn {
     display: block;
     width: 100%;
-    padding: var(--space-3) var(--space-4);
-    background: var(--tm-loyal-blue);
+    padding: 0.75rem 1rem;
+    background: #004165;
     color: white;
     border: none;
     border-radius: 6px;
-    font-family: var(--tm-font-headline);
+    font-family: 'Montserrat', 'Gotham', Arial, sans-serif;
     font-size: 0.9375rem;
     font-weight: 700;
     text-align: center;
     text-decoration: none;
     cursor: pointer;
-    margin-bottom: var(--space-2);
+    margin-bottom: 0.5rem;
+    box-sizing: border-box;
   }
-  #pathways-app .pa-modal-btn:last-child { margin-bottom: 0; }
-  #pathways-app .pa-modal-btn:hover { background: #005a8e; }
-  #pathways-app .pa-modal-btn-generic {
-    background: #555;
+  .pa-modal-btn:last-child  { margin-bottom: 0; }
+  .pa-modal-btn:hover       { background: #005a8e; }
+  .pa-modal-btn-generic     { background: #555; }
+  .pa-modal-btn-generic:hover { background: #333; }
+  /* Badge styles re-declared for use inside the modal (outside #pathways-app) */
+  #pathways-modal-sheet .badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+    box-sizing: border-box;
   }
-  #pathways-app .pa-modal-btn-generic:hover { background: #333; }
+  #pathways-modal-sheet .badge-required { background: #004165; color: #ffffff; }
+  #pathways-modal-sheet .badge-elective { background: #F2DF74; color: #000000; }
 
   /* ── FAB — viewport-fixed, outside #pathways-app ─────── */
   #pathways-fab {
@@ -971,10 +994,15 @@
       + btnsHTML;
 
     var bd = document.getElementById('pathways-modal-backdrop');
+    /* Move to <body> so position:fixed covers the full viewport,
+       not just the FTH content column (FTH ancestor has transform/stacking context) */
+    if (bd.parentNode !== document.body) {
+      document.body.appendChild(bd);
+    }
     bd.removeAttribute('hidden');
   }
 
-  /* X close button */
+  /* X close button — re-query after potential DOM move */
   document.getElementById('pathways-modal-close').addEventListener('click', closeModal);
 
   function closeModal() {
