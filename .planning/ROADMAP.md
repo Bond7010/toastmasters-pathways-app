@@ -29,12 +29,12 @@ Build a single self-contained HTML file that gives Toastmasters club members ins
   7. FAB appears on scroll and returns to top on click
   8. Brand colors and fonts match Toastmasters brand kit exactly
 
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: FTH deploy test + HTML shell + CSS design system (brand tokens, Grid layout, 100dvh)
-- [ ] 01-02: JSON schema + placeholder data + render pipeline (buildProjectCardHTML, buildEnhancementHTML, render())
-- [ ] 01-03: Events + full ARIA tab pattern + keyboard navigation + FAB (IntersectionObserver)
+- [ ] 01-01-PLAN.md — FTH throwaway gate test + HTML shell + complete CSS design system (brand tokens, Grid, 100dvh, badges, font preconnect)
+- [ ] 01-02-PLAN.md — Embedded JSON placeholder data (2 paths) + render pipeline (buildProjectCardHTML, buildEnhancementHTML, buildLevelHTML, render())
+- [ ] 01-03-PLAN.md — Event wiring + full W3C APG ARIA tab pattern + arrow-key keyboard navigation + IntersectionObserver FAB
 
 ### Phase 2: Data
 **Goal**: All 8 paths × 5 levels of real content embedded and validated. Every project has correct name, time, purpose, and Required/Elective classification. Enhancement sections populated for all 6 current paths.
@@ -83,9 +83,10 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Not started | - |
+| 1. Foundation | 0/3 | Planned | - |
 | 2. Data | 0/4 | Not started | - |
 | 3. Polish | 0/3 | Not started | - |
 
 ---
 *Roadmap created: 2026-05-27*
+*Plans for Phase 1 written: 2026-05-28*
