@@ -32,7 +32,7 @@
 <!-- GSD:conventions-start source:CONVENTIONS.md -->
 ## Conventions
 
-**Data format:** Time requirements → `"N–N min"` (en-dash, abbreviated unit, no "minute" word). Strict enum `"type": "required" | "elective"` — no freeform strings.
+**Data format:** Time requirements → `"N–N min"` (en-dash, abbreviated unit, no "minute" word). Strict enum `"type": "Required" | "Elective"` (capitalized — matches badge label rendering logic) — no freeform strings.
 
 **DOM IDs must include path slug + level:** `id="panel-dynamic-leadership-l2"` — "Ice Breaker" appears in all 8 paths' Level 1; IDs without path context will collide.
 

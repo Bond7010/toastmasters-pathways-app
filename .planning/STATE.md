@@ -11,8 +11,8 @@ See: .planning/PROJECT.md (updated 2026-05-27)
 
 Phase: 1 of 3 (Foundation)
 Plan: 0 of 3 in current phase
-Status: Ready to plan
-Last activity: 2026-05-27 — Project initialized; research, requirements, and roadmap complete
+Status: Ready to execute
+Last activity: 2026-05-28 — Phase 1 planned (3 plans, verification passed)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -49,8 +49,12 @@ None.
 
 ### Blockers/Concerns
 
-- **Basic Training level breakdown**: The 5-level grouping for Basic Training for Toastmasters (12 speeches → 5 levels) is unknown. Needs confirmation from Base Camp or user before Phase 2 data entry. Placeholder grouping: Lvl1=Speeches 1-3, Lvl2=Speeches 4-5, Lvl3=Speeches 6-8, Lvl4=Speeches 9-10, Lvl5=Speeches 11-12.
 - **FTH script-tag test**: Must be done as the first task of Phase 1 before writing real code (C-1 pitfall).
+- **Basic Training level names**: Level 1 is "Introduction to Basic Training"; Levels 2–5 names unknown — will need Base Camp verification in Phase 2. Using "Level 2" etc. as placeholders.
+
+### Basic Training Structure (confirmed 2026-05-27)
+Level grouping: L1=Speeches 1-2 + Table Topic Chairperson role; L2=Toastmaster of Evening role + Speeches 3-4; L3=Speeches 5-6 + Critic/Evaluator role + "Take Your Measure Again" self-eval; L4=Speeches 7-9; L5=Speeches 10-12.
+Meeting roles and self-evaluations appear as Required items within levels (no separate Enhancement section for this vintage path).
 
 ## Session Continuity
 
