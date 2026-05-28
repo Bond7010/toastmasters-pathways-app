@@ -30,6 +30,7 @@
     --space-3: 0.75rem;
     --space-4: 1rem;
     --space-6: 1.5rem;
+    --space-8: 2rem;
 
     font-family: var(--tm-font-body);
     font-size: 16px;
@@ -116,6 +117,18 @@
   #pathways-app .pa-content {
     padding: var(--space-4);
     background: #f9f9f9;
+  }
+
+  /* ── Level section wrapper (all levels rendered, stacked) */
+  #pathways-app .level-section {
+    padding-bottom: var(--space-6);
+    margin-bottom: var(--space-8);
+    border-bottom: 2px solid #e0e0e0;
+    scroll-margin-top: var(--space-2); /* offset for tab strip when scrolled to */
+  }
+  #pathways-app .level-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
   }
 
   /* ── Level header ────────────────────────────────────── */
@@ -642,12 +655,15 @@
     var cardsHTML = level.projects
       .map(function(p, i) { return buildProjectCardHTML(p, pathId, levelIndex, i); })
       .join('');
-    return '<div class="level-header">'
+    /* Each level gets an ID so tab clicks can scroll-to-section */
+    return '<div class="level-section" id="level-' + pathId + '-l' + levelIndex + '">'
+      + '<div class="level-header">'
       + '<h2 class="level-name">Level ' + level.level + ': ' + level.name + '</h2>'
       + '<p class="level-completion-req">' + level.completionRequirement + '</p>'
       + '</div>'
       + enhHTML
-      + cardsHTML;
+      + cardsHTML
+      + '</div>';
   }
 
   function buildTabsHTML(pathData) {
@@ -665,18 +681,28 @@
     }).join('');
   }
 
-  /* ── render() ────────────────────────────────────────── */
+  /* ── render(): rebuilds tabs + paints ALL levels stacked ─ */
   function render() {
     var pathData = PATHWAYS.find(function(p) { return p.id === state.selectedPath; });
     if (!pathData) return;
-    var level = pathData.levels[state.selectedLevel];
-    if (!level) return;
 
     document.getElementById('pathways-tab-strip').innerHTML = buildTabsHTML(pathData);
 
+    /* All levels rendered at once — users scroll up/down, tabs are anchor jumps */
     var pane = document.getElementById('pathways-content-pane');
-    pane.innerHTML = buildLevelHTML(level, state.selectedPath, state.selectedLevel);
-    pane.setAttribute('aria-labelledby', 'tab-' + state.selectedPath + '-l' + state.selectedLevel);
+    pane.innerHTML = pathData.levels
+      .map(function(level, i) { return buildLevelHTML(level, pathData.id, i); })
+      .join('');
+  }
+
+  /* ── updateTabActive(): update tab visuals without re-render ── */
+  function updateTabActive(levelIndex) {
+    Array.from(document.querySelectorAll('#pathways-tab-strip [role="tab"]'))
+      .forEach(function(t, i) {
+        t.setAttribute('aria-selected', String(i === levelIndex));
+        t.setAttribute('tabindex', i === levelIndex ? '0' : '-1');
+      });
+    state.selectedLevel = levelIndex;
   }
 
   /* ── Initial render ──────────────────────────────────── */
@@ -696,17 +722,23 @@
   document.getElementById('pathways-path-selector').addEventListener('change', function(e) {
     if (!PATHWAYS.find(function(p) { return p.id === e.target.value; })) return;
     setState({ selectedPath: e.target.value, selectedLevel: 0 });
+    /* Scroll back to top of app on path change */
+    document.getElementById('pathways-app').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
-  /* ── Tab click delegation ────────────────────────────── */
+  /* ── Tab click: highlight tab + scroll to level section ─ */
   document.getElementById('pathways-tab-strip').addEventListener('click', function(e) {
     var tab = e.target.closest('[role="tab"]');
     if (!tab) return;
     var levelIndex = parseInt(tab.dataset.levelIndex, 10);
     var pathData = PATHWAYS.find(function(p) { return p.id === state.selectedPath; });
     if (!pathData || levelIndex < 0 || levelIndex >= pathData.levels.length) return;
-    if (levelIndex === state.selectedLevel) return;
-    setState({ selectedLevel: levelIndex });
+
+    updateTabActive(levelIndex);
+
+    var section = document.getElementById('level-' + state.selectedPath + '-l' + levelIndex);
+    if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
     var newTab = document.getElementById('tab-' + state.selectedPath + '-l' + levelIndex);
     if (newTab) newTab.focus();
   });
@@ -725,7 +757,9 @@
       case 'Enter':
       case ' ': {
         var li = parseInt(tabs[cur].dataset.levelIndex, 10);
-        setState({ selectedLevel: li });
+        updateTabActive(li);
+        var section = document.getElementById('level-' + state.selectedPath + '-l' + li);
+        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
         var at = document.getElementById('tab-' + state.selectedPath + '-l' + li);
         if (at) at.focus();
         e.preventDefault();
