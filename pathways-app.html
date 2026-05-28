@@ -266,13 +266,33 @@
   #pathways-app #pathways-modal-sheet {
     background: white;
     width: 100%;
-    max-height: 55vh;
+    max-height: 60vh;
     border-radius: 12px 12px 0 0;
     overflow-y: auto;
-    padding: var(--space-3) var(--space-4) var(--space-6);
+    padding: var(--space-4) var(--space-4) var(--space-6);
     cursor: default;
     box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+    position: relative; /* anchor for the X close button */
   }
+  #pathways-app .pa-modal-close-btn {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    padding: 0;
+    line-height: 1;
+  }
+  #pathways-app .pa-modal-close-btn:hover { background: #f0f0f0; color: #333; }
   #pathways-app .pa-modal-handle {
     width: 40px;
     height: 4px;
@@ -286,6 +306,7 @@
     align-items: flex-start;
     gap: var(--space-2);
     margin-bottom: var(--space-1);
+    padding-right: var(--space-6); /* keep title clear of the X button */
   }
   #pathways-app .pa-modal-title {
     font-family: var(--tm-font-headline);
@@ -293,6 +314,14 @@
     font-size: 1rem;
     color: var(--tm-loyal-blue);
     margin: 0;
+  }
+  #pathways-app .pa-modal-section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #888;
+    margin: var(--space-3) 0 var(--space-1);
   }
   #pathways-app .pa-modal-time {
     font-size: 0.875rem;
@@ -384,6 +413,7 @@
   <!-- Modal: bottom sheet — hidden until a project card is clicked -->
   <div id="pathways-modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="pathways-modal-title">
     <div id="pathways-modal-sheet">
+      <button id="pathways-modal-close" class="pa-modal-close-btn" aria-label="Close">&times;</button>
       <div id="pathways-modal-content"><!-- populated by JS --></div>
     </div>
   </div>
@@ -935,13 +965,17 @@
       + '<span class="badge ' + badgeClass + '">' + project.type + '</span>'
       + '</div>'
       + '<p class="pa-modal-time">' + project.time + '</p>'
+      + '<p class="pa-modal-section-label">Project Description</p>'
       + '<p class="pa-modal-purpose">' + project.purpose + '</p>'
+      + '<p class="pa-modal-section-label">Evaluation Resources</p>'
       + btnsHTML;
 
     var bd = document.getElementById('pathways-modal-backdrop');
     bd.removeAttribute('hidden');
-    bd.focus();
   }
+
+  /* X close button */
+  document.getElementById('pathways-modal-close').addEventListener('click', closeModal);
 
   function closeModal() {
     document.getElementById('pathways-modal-backdrop').setAttribute('hidden', '');
