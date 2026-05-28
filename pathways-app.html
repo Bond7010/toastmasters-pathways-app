@@ -1,833 +1,757 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Toastmasters Pathways</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    /* ── Reset ─────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
 
-    /* ── Tier 1: Brand values (exact hex — do not approximate) ── */
-    :root {
-      --tm-loyal-blue:   #004165;
-      --tm-true-maroon:  #772432;
-      --tm-cool-gray:    #A9B2B1;
-      --tm-happy-yellow: #F2DF74;
-      --tm-white:        #FFFFFF;
+<style>
+  /* ── App container — scopes all tokens and styles ─────── */
+  #pathways-app {
+    /* Tier 1: Brand values */
+    --tm-loyal-blue:   #004165;
+    --tm-true-maroon:  #772432;
+    --tm-cool-gray:    #A9B2B1;
+    --tm-happy-yellow: #F2DF74;
+    --tm-white:        #FFFFFF;
+    --tm-font-headline: 'Montserrat', 'Gotham', Arial, sans-serif;
+    --tm-font-body:     'Source Sans 3', 'Segoe UI', Arial, sans-serif;
 
-      --tm-font-headline: 'Montserrat', 'Gotham', Arial, sans-serif;
-      --tm-font-body:     'Source Sans 3', 'Segoe UI', Arial, sans-serif;
+    /* Tier 2: Semantic intent */
+    --color-header-bg:           var(--tm-loyal-blue);
+    --color-header-text:         var(--tm-white);
+    --color-selector-bg:         var(--tm-true-maroon);
+    --color-tab-active:          var(--tm-loyal-blue);
+    --color-badge-required-bg:   var(--tm-loyal-blue);
+    --color-badge-required-text: var(--tm-white);
+    --color-badge-elective-bg:   var(--tm-happy-yellow);
+    --color-badge-elective-text: #000000;
 
-      /* Tier 2: Semantic intent */
-      --color-header-bg:           var(--tm-loyal-blue);
-      --color-header-text:         var(--tm-white);
-      --color-selector-bg:         var(--tm-true-maroon);
-      --color-selector-text:       var(--tm-white);
-      --color-tab-active:          var(--tm-loyal-blue);
-      --color-badge-required-bg:   var(--tm-loyal-blue);
-      --color-badge-required-text: var(--tm-white);
-      --color-badge-elective-bg:   var(--tm-happy-yellow);
-      --color-badge-elective-text: #000000;
+    /* Spacing scale (4px base) */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-6: 1.5rem;
 
-      /* Spacing scale (4px base) */
-      --space-1: 0.25rem;
-      --space-2: 0.5rem;
-      --space-3: 0.75rem;
-      --space-4: 1rem;
-      --space-6: 1.5rem;
-      --space-8: 2rem;
-    }
+    font-family: var(--tm-font-body);
+    font-size: 16px;
+    width: 100%;
+  }
+  #pathways-app *,
+  #pathways-app *::before,
+  #pathways-app *::after { box-sizing: border-box; }
 
-    /* ── Body grid: 4 zones, no body scroll ─────────────── */
-    body {
-      display: grid;
-      grid-template-rows: auto auto auto 1fr;
-      /* zones: top-bar | path-selector | tab-strip | content-area */
-      height: 100dvh; /* NOT 100vh — iOS Safari address-bar clips with 100vh */
-      overflow: hidden;
-      margin: 0;
-      font-family: var(--tm-font-body);
-      font-size: 16px;
-    }
+  /* ── Top bar ─────────────────────────────────────────── */
+  #pathways-app .pa-top-bar {
+    background: var(--color-header-bg);
+    color: var(--color-header-text);
+    padding: var(--space-3) var(--space-4);
+    font-family: var(--tm-font-headline);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
 
-    /* ── Zone 1: Top bar ─────────────────────────────────── */
-    #top-bar {
-      background: var(--color-header-bg);
-      color: var(--color-header-text);
-      padding: var(--space-3) var(--space-4);
-      font-family: var(--tm-font-headline);
-      font-size: 1.25rem;
-      font-weight: 700;
-    }
+  /* ── Path selector ───────────────────────────────────── */
+  #pathways-app .pa-selector-wrapper {
+    position: relative;
+    background: var(--color-selector-bg);
+    padding: var(--space-2) var(--space-4);
+  }
+  #pathways-app .pa-selector-wrapper::after {
+    content: "▾";
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    pointer-events: none;
+  }
+  #pathways-app .pa-path-selector {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: white;
+    font-family: var(--tm-font-headline);
+    font-size: 1rem;
+    padding: var(--space-2) 0;
+    cursor: pointer;
+    outline-offset: 2px;
+    min-height: 44px;
+  }
+  #pathways-app .pa-path-selector option {
+    background: var(--tm-true-maroon);
+    color: white;
+  }
 
-    /* ── Zone 2: Path selector ───────────────────────────── */
-    #path-selector-zone {
-      /* wrapper sets the zone; inner div handles the styling */
-    }
-    .path-selector-wrapper {
-      position: relative;
-      background: var(--color-selector-bg);
-      padding: var(--space-2) var(--space-4);
-    }
-    .path-selector-wrapper::after {
-      content: "▾";
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: white;
-      pointer-events: none;
-    }
-    .path-selector {
-      appearance: none;
-      -webkit-appearance: none;
-      width: 100%;
-      background: transparent;
-      border: none;
-      color: white;
-      font-family: var(--tm-font-headline);
-      font-size: 1rem;
-      padding: var(--space-2) 0;
-      cursor: pointer;
-      outline-offset: 2px;
-      min-height: 44px; /* ACCSS-02: minimum touch target */
-    }
-    /* Chromium/Edge: style the select options */
-    .path-selector option {
-      background: var(--tm-true-maroon);
-      color: white;
-    }
+  /* ── Tab strip: wraps vertically, no horizontal scroll ── */
+  #pathways-app .pa-tab-strip {
+    display: flex;
+    flex-wrap: wrap;
+    background: #f5f5f5;
+    border-bottom: 2px solid #ddd;
+  }
+  #pathways-app [role="tab"] {
+    flex: 1 1 auto;
+    min-width: 64px;
+    white-space: nowrap;
+    padding: var(--space-2) var(--space-3);
+    min-height: 44px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    font-family: var(--tm-font-headline);
+    font-size: 0.875rem;
+    color: #555;
+    text-align: center;
+  }
+  #pathways-app [role="tab"][aria-selected="true"] {
+    border-bottom-color: var(--color-tab-active);
+    color: var(--tm-loyal-blue);
+    font-weight: 700;
+    background: white;
+  }
 
-    /* ── Zone 3: Level tab strip ─────────────────────────── */
-    #tab-strip {
-      display: flex;
-      overflow-x: auto;
-      overscroll-behavior-x: contain;
-      scroll-snap-type: x proximity;
-      scrollbar-width: none; /* Firefox */
-      background: #f5f5f5;
-      border-bottom: 1px solid #ddd;
-    }
-    #tab-strip::-webkit-scrollbar { display: none; }
+  /* ── Content area (flows with FTH page scroll) ────────── */
+  #pathways-app .pa-content {
+    padding: var(--space-4);
+    background: #f9f9f9;
+  }
 
-    [role="tab"] {
-      flex-shrink: 0;
-      scroll-snap-align: start;
-      white-space: nowrap;
-      padding: var(--space-3) var(--space-4);
-      min-height: 44px; /* ACCSS-02: minimum touch target */
-      border: none;
-      border-bottom: 3px solid transparent;
-      background: transparent;
-      cursor: pointer;
-      font-family: var(--tm-font-headline);
-      font-size: 0.875rem;
-      color: #333;
-    }
-    [role="tab"][aria-selected="true"] {
-      border-bottom-color: var(--color-tab-active);
-      color: var(--tm-loyal-blue);
-      font-weight: 700;
-    }
+  /* ── Level header ────────────────────────────────────── */
+  #pathways-app .level-header { margin-bottom: var(--space-4); }
+  #pathways-app .level-name {
+    font-family: var(--tm-font-headline);
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--tm-loyal-blue);
+    margin: 0 0 var(--space-1) 0;
+  }
+  #pathways-app .level-completion-req {
+    font-size: 0.9375rem;
+    color: #555;
+    margin: 0;
+  }
 
-    /* ── Zone 4: Content area (only this scrolls) ────────── */
-    #content-area {
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      /* DO NOT add -webkit-overflow-scrolling: touch — deprecated iOS 13+ */
-      padding: var(--space-4);
-      background: #f9f9f9;
-    }
-    /* #content-pane: plain div that render() targets with innerHTML */
+  /* ── Enhancement section ─────────────────────────────── */
+  #pathways-app .enhancement-section {
+    background: white;
+    border: 2px solid var(--tm-loyal-blue);
+    border-radius: 6px;
+    padding: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+  #pathways-app .enhancement-title {
+    font-family: var(--tm-font-headline);
+    font-weight: 700;
+    color: var(--tm-loyal-blue);
+    margin: 0 0 var(--space-2) 0;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  #pathways-app .enhancement-subtitle {
+    font-size: 0.875rem;
+    color: #555;
+    margin: 0 0 var(--space-2) 0;
+  }
+  #pathways-app .enhancement-roles {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  #pathways-app .enhancement-roles li {
+    background: #e8eef2;
+    color: var(--tm-loyal-blue);
+    padding: var(--space-1) var(--space-3);
+    border-radius: 3px;
+    font-size: 0.875rem;
+  }
+  #pathways-app .enhancement-notes {
+    margin: var(--space-2) 0 0 0;
+    font-size: 0.875rem;
+    color: #555;
+    font-style: italic;
+  }
 
-    /* ── Level header ────────────────────────────────────── */
-    .level-header {
-      margin-bottom: var(--space-4);
-    }
-    .level-name {
-      font-family: var(--tm-font-headline);
-      font-weight: 700;
-      font-size: 1.25rem;
-      color: var(--tm-loyal-blue);
-      margin: 0 0 var(--space-1) 0;
-    }
-    .level-completion-req {
-      font-size: 0.9375rem;
-      color: #555;
-      margin: 0;
-    }
+  /* ── Project card ────────────────────────────────────── */
+  #pathways-app .project-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: var(--space-4);
+    margin-bottom: var(--space-3);
+  }
+  #pathways-app .project-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+  }
+  #pathways-app .project-name {
+    font-family: var(--tm-font-headline);
+    font-weight: 700;
+    font-size: 1rem;
+    margin: 0;
+  }
+  #pathways-app .project-time {
+    font-size: 0.875rem;
+    color: #555;
+    margin: var(--space-1) 0;
+  }
+  #pathways-app .project-purpose {
+    font-size: 0.9375rem;
+    color: #333;
+    line-height: 1.5;
+    margin: 0;
+  }
 
-    /* ── Enhancement section ─────────────────────────────── */
-    .enhancement-section {
-      background: white;
-      border: 2px solid var(--tm-loyal-blue);
-      border-radius: 6px;
-      padding: var(--space-4);
-      margin-bottom: var(--space-4);
-    }
-    .enhancement-title {
-      font-family: var(--tm-font-headline);
-      font-weight: 700;
-      color: var(--tm-loyal-blue);
-      margin: 0 0 var(--space-2) 0;
-      font-size: 0.875rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .enhancement-subtitle {
-      font-size: 0.875rem;
-      color: #555;
-      margin: 0 0 var(--space-2) 0;
-    }
-    .enhancement-roles {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-    }
-    .enhancement-roles li {
-      background: #e8eef2;
-      color: var(--tm-loyal-blue);
-      padding: var(--space-1) var(--space-3);
-      border-radius: 3px;
-      font-size: 0.875rem;
-    }
-    .enhancement-notes {
-      margin: var(--space-2) 0 0 0;
-      font-size: 0.875rem;
-      color: #555;
-      font-style: italic;
-    }
+  /* ── Badges ──────────────────────────────────────────── */
+  #pathways-app .badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-2);
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  #pathways-app .badge-required {
+    background: var(--color-badge-required-bg);
+    color: var(--color-badge-required-text);
+  }
+  #pathways-app .badge-elective {
+    background: var(--color-badge-elective-bg);
+    color: var(--color-badge-elective-text);
+    /* NEVER use --tm-happy-yellow as text color on light bg — fails WCAG 1.4:1 */
+  }
 
-    /* ── Project card ────────────────────────────────────── */
-    .project-card {
-      background: white;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      padding: var(--space-4);
-      margin-bottom: var(--space-3);
-    }
-    .project-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: var(--space-2);
-      margin-bottom: var(--space-2);
-    }
-    .project-name {
-      font-family: var(--tm-font-headline);
-      font-weight: 700;
-      font-size: 1rem;
-      margin: 0;
-    }
-    .project-time {
-      font-size: 0.875rem;
-      color: #555;
-      margin: var(--space-1) 0;
-    }
-    .project-purpose {
-      font-size: 0.9375rem;
-      color: #333;
-      line-height: 1.5;
-      margin: 0;
-    }
+  /* ── FAB — viewport-fixed, outside #pathways-app ─────── */
+  #pathways-fab {
+    position: fixed;
+    bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    right: 1.5rem;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: #004165; /* --tm-loyal-blue: literal since outside scoped container */
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    z-index: 9999;
+    font-size: 1.5rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+  }
+  #pathways-fab[hidden] { display: none; }
 
-    /* ── Badges ──────────────────────────────────────────── */
-    .badge {
-      display: inline-block;
-      padding: var(--space-1) var(--space-2);
-      border-radius: 3px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .badge-required {
-      background: var(--color-badge-required-bg);
-      color: var(--color-badge-required-text);
-    }
-    .badge-elective {
-      background: var(--color-badge-elective-bg);
-      color: var(--color-badge-elective-text);
-      /* NEVER use --tm-happy-yellow as text color on light bg — fails WCAG 1.4:1 */
-    }
+  /* ── Focus indicator (WCAG) ──────────────────────────── */
+  #pathways-app :focus-visible {
+    outline: 2px solid var(--tm-loyal-blue);
+    outline-offset: 2px;
+  }
+</style>
 
-    /* ── FAB (Floating Action Button) ────────────────────── */
-    #fab-scroll-top {
-      position: fixed;
-      bottom: calc(1.5rem + env(safe-area-inset-bottom));
-      right: 1.5rem;
-      width: 3rem;
-      height: 3rem;
-      border-radius: 50%;
-      background: var(--tm-loyal-blue);
-      color: white;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      z-index: 100;
-      font-size: 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #fab-scroll-top[hidden] { display: none; }
+<!-- ── App markup ──────────────────────────────────────── -->
+<div id="pathways-app">
 
-    /* ── Responsive: wider viewports ─────────────────────── */
-    @media (min-width: 768px) {
-      body {
-        max-width: 900px;
-        margin: 0 auto;
-      }
-      .project-card {
-        padding: var(--space-6);
-      }
-    }
+  <div class="pa-top-bar" role="banner">Pathways</div>
 
-    /* ── Focus indicator (WCAG — never remove) ────────────── */
-    :focus-visible {
-      outline: 2px solid var(--tm-loyal-blue);
-      outline-offset: 2px;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Zone 1: Top bar -->
-  <header id="top-bar" role="banner">Pathways</header>
-
-  <!-- Zone 2: Path selector -->
-  <div id="path-selector-zone">
-    <div class="path-selector-wrapper">
-      <select id="path-selector" class="path-selector" aria-label="Select a Pathways path">
-        <!-- Options populated dynamically from PATHWAYS data -->
-      </select>
-    </div>
+  <div class="pa-selector-wrapper">
+    <select id="pathways-path-selector" class="pa-path-selector" aria-label="Select a Pathways path">
+      <!-- Populated dynamically -->
+    </select>
   </div>
 
-  <!-- Zone 3: Level tab strip (rebuilt by render()) -->
-  <div id="tab-strip" role="tablist" aria-label="Level tabs">
+  <div id="pathways-tab-strip" class="pa-tab-strip" role="tablist" aria-label="Level tabs">
     <!-- Tabs rendered by render() -->
   </div>
 
-  <!-- Zone 4: Content area (only this zone scrolls) -->
-  <div id="content-area">
-    <!-- sentinel must be first child — IntersectionObserver watches it -->
-    <div id="scroll-sentinel" style="height: 1px; pointer-events: none;"></div>
-    <div id="content-pane" role="tabpanel" tabindex="0" aria-labelledby="">
+  <div class="pa-content">
+    <!-- Sentinel: IntersectionObserver target — must be first child -->
+    <div id="pathways-sentinel" style="height: 1px; pointer-events: none;"></div>
+    <div id="pathways-content-pane" role="tabpanel" tabindex="0" aria-labelledby="">
       <!-- Content rendered by render() -->
     </div>
   </div>
 
-  <!-- FAB: hidden until user scrolls -->
-  <button id="fab-scroll-top" hidden aria-label="Back to top">&#8679;</button>
+</div>
 
-  <!-- ── Data block: inert JSON, parsed once by JS ──────── -->
-  <script type="application/json" id="pathways-data">
-  {
-    "dataVersion": "2026-05",
-    "lastVerified": "2026-05-27",
-    "paths": [
-      {
-        "id": "dynamic-leadership",
-        "name": "Dynamic Leadership",
-        "levels": [
-          {
-            "level": 1,
-            "name": "Mastering Fundamentals",
-            "completionRequirement": "Complete 4 required projects and all enhancement tasks",
-            "enhancement": {
-              "roles": [
-                "Table Topic Speaker",
-                "Evaluator",
-                "Timer OR Ah-Counter"
-              ],
-              "notes": "Table Topics Speaker must be completed before delivering an Ice Breaker speech"
+<!-- FAB outside #pathways-app (needs viewport-relative fixed position) -->
+<button id="pathways-fab" hidden aria-label="Back to top">&#8679;</button>
+
+<!-- ── Data block: inert JSON, parsed once ─────────────── -->
+<script type="application/json" id="pathways-data">
+{
+  "dataVersion": "2026-05",
+  "lastVerified": "2026-05-27",
+  "paths": [
+    {
+      "id": "dynamic-leadership",
+      "name": "Dynamic Leadership",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Mastering Fundamentals",
+          "completionRequirement": "Complete 4 required projects and all enhancement tasks",
+          "enhancement": {
+            "roles": [
+              "Table Topic Speaker",
+              "Evaluator",
+              "Timer OR Ah-Counter"
+            ],
+            "notes": "Table Topics Speaker must be completed before delivering an Ice Breaker speech"
+          },
+          "projects": [
+            {
+              "name": "Ice Breaker",
+              "type": "Required",
+              "time": "4–6 min",
+              "purpose": "Deliver a speech about yourself to introduce yourself to the club and learn the basic structure of public speaking."
             },
-            "projects": [
-              {
-                "name": "Ice Breaker",
-                "type": "Required",
-                "time": "4–6 min",
-                "purpose": "Deliver a speech about yourself to introduce yourself to the club and learn the basic structure of public speaking."
-              },
-              {
-                "name": "Writing a Speech with Purpose",
-                "type": "Required",
-                "time": "5–7 min",
-                "purpose": "Write and deliver a speech on a topic of your choice, demonstrating that you can organize ideas logically."
-              },
-              {
-                "name": "Introduction to Vocal Variety and Body Language",
-                "type": "Required",
-                "time": "5–7 min",
-                "purpose": "Learn to use your voice and body to enhance your message and engage your audience."
-              },
-              {
-                "name": "Evaluation and Feedback",
-                "type": "Required",
-                "time": "5–7 min",
-                "purpose": "Learn how to give and receive constructive feedback by delivering a speech and evaluating a fellow member."
-              },
-              {
-                "name": "Researching and Presenting",
-                "type": "Elective",
-                "time": "5–7 min",
-                "purpose": "Research a topic thoroughly and present your findings in a clear, organized speech."
-              }
-            ]
-          },
-          {
-            "level": 2,
-            "name": "Learning Your Style",
-            "completionRequirement": "Complete 2 required projects, 1 elective project, and all enhancement tasks",
-            "enhancement": {
-              "roles": [
-                "Toastmaster of the Evening",
-                "General Evaluator"
-              ],
-              "notes": ""
+            {
+              "name": "Writing a Speech with Purpose",
+              "type": "Required",
+              "time": "5–7 min",
+              "purpose": "Write and deliver a speech on a topic of your choice, demonstrating that you can organize ideas logically."
             },
-            "projects": [
-              {
-                "name": "Understanding Your Communication Style",
-                "type": "Required",
-                "time": "5–7 min",
-                "purpose": "Identify your personal communication style and deliver a speech that plays to your strengths."
-              },
-              {
-                "name": "Effective Body Language",
-                "type": "Required",
-                "time": "5–7 min",
-                "purpose": "Demonstrate deliberate use of body language to reinforce your verbal message."
-              },
-              {
-                "name": "Connect with Storytelling",
-                "type": "Elective",
-                "time": "5–7 min",
-                "purpose": "Use storytelling techniques to connect with your audience on an emotional level."
-              },
-              {
-                "name": "Creating Effective Visual Aids",
-                "type": "Elective",
-                "time": "5–7 min",
-                "purpose": "Design and use visual aids that enhance your speech without overwhelming your audience."
-              }
-            ]
-          },
-          {
-            "level": 3,
-            "name": "Increasing Knowledge",
-            "completionRequirement": "Complete 1 required project, 2 elective projects, and all enhancement tasks",
-            "enhancement": {
-              "roles": [
-                "Prepared Speaker Coach",
-                "Mentorship activities"
-              ],
-              "notes": ""
+            {
+              "name": "Introduction to Vocal Variety and Body Language",
+              "type": "Required",
+              "time": "5–7 min",
+              "purpose": "Learn to use your voice and body to enhance your message and engage your audience."
             },
-            "projects": [
-              {
-                "name": "Inspire Your Audience",
-                "type": "Required",
-                "time": "7–10 min",
-                "purpose": "Craft and deliver a speech designed to motivate your audience to take action or change a belief."
-              },
-              {
-                "name": "Persuasive Influence",
-                "type": "Elective",
-                "time": "5–7 min",
-                "purpose": "Persuade your audience to adopt your viewpoint using evidence, logic, and emotional appeal."
-              },
-              {
-                "name": "The Power of Humor",
-                "type": "Elective",
-                "time": "5–7 min",
-                "purpose": "Incorporate appropriate humor to engage your audience and lighten complex topics."
-              }
-            ]
-          },
-          {
-            "level": 4,
-            "name": "Building Skills",
-            "completionRequirement": "Complete 1 required project, 1 elective project, and all enhancement tasks",
-            "enhancement": {
-              "roles": [
-                "Club Officer or Committee Chair activities"
-              ],
-              "notes": ""
+            {
+              "name": "Evaluation and Feedback",
+              "type": "Required",
+              "time": "5–7 min",
+              "purpose": "Learn how to give and receive constructive feedback by delivering a speech and evaluating a fellow member."
             },
-            "projects": [
-              {
-                "name": "Leading in Your Volunteer Organization",
-                "type": "Required",
-                "time": "5–7 min",
-                "purpose": "Describe a leadership experience in a volunteer organization and the lessons you learned."
-              },
-              {
-                "name": "Managing a Difficult Audience",
-                "type": "Elective",
-                "time": "12–15 min",
-                "purpose": "Deliver a speech to a deliberately challenging audience and practice managing disruptions professionally."
-              }
-            ]
+            {
+              "name": "Researching and Presenting",
+              "type": "Elective",
+              "time": "5–7 min",
+              "purpose": "Research a topic thoroughly and present your findings in a clear, organized speech."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "name": "Learning Your Style",
+          "completionRequirement": "Complete 2 required projects, 1 elective project, and all enhancement tasks",
+          "enhancement": {
+            "roles": [
+              "Toastmaster of the Evening",
+              "General Evaluator"
+            ],
+            "notes": ""
           },
-          {
-            "level": 5,
-            "name": "Demonstrating Expertise",
-            "completionRequirement": "Complete 2 required projects and all enhancement tasks",
-            "enhancement": {
-              "roles": [
-                "Serve in a club leadership role for at least 6 months"
-              ],
-              "notes": ""
+          "projects": [
+            {
+              "name": "Understanding Your Communication Style",
+              "type": "Required",
+              "time": "5–7 min",
+              "purpose": "Identify your personal communication style and deliver a speech that plays to your strengths."
             },
-            "projects": [
-              {
-                "name": "High Performance Leadership",
-                "type": "Required",
-                "time": "Project-based",
-                "purpose": "Plan and execute a significant project for your club or community, then present a report to your club."
-              },
-              {
-                "name": "Prepare to Speak Professionally",
-                "type": "Required",
-                "time": "18–22 min",
-                "purpose": "Develop and deliver a professional-level presentation suitable for an outside audience."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "communication-series",
-        "name": "Communication Series",
-        "levels": [
-          {
-            "level": 1,
-            "name": "Introduction to Basic Training",
-            "completionRequirement": "Complete all required projects",
-            "enhancement": null,
-            "projects": [
-              {
-                "name": "Ice Breaker",
-                "type": "Required",
-                "time": "4–6 min",
-                "purpose": "Introduce yourself to your club with a brief prepared speech."
-              },
-              {
-                "name": "Speech 2",
-                "type": "Required",
-                "time": "5–7 min",
-                "purpose": "Deliver a well-organized speech on a topic of your choice using clear transitions and a logical structure."
-              }
-            ]
+            {
+              "name": "Effective Body Language",
+              "type": "Required",
+              "time": "5–7 min",
+              "purpose": "Demonstrate deliberate use of body language to reinforce your verbal message."
+            },
+            {
+              "name": "Connect with Storytelling",
+              "type": "Elective",
+              "time": "5–7 min",
+              "purpose": "Use storytelling techniques to connect with your audience on an emotional level."
+            },
+            {
+              "name": "Creating Effective Visual Aids",
+              "type": "Elective",
+              "time": "5–7 min",
+              "purpose": "Design and use visual aids that enhance your speech without overwhelming your audience."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "name": "Increasing Knowledge",
+          "completionRequirement": "Complete 1 required project, 2 elective projects, and all enhancement tasks",
+          "enhancement": {
+            "roles": [
+              "Prepared Speaker Coach",
+              "Mentorship activities"
+            ],
+            "notes": ""
           },
-          {
-            "level": 2,
-            "name": "Level 2",
-            "completionRequirement": "Complete all required projects",
-            "enhancement": null,
-            "projects": [
-              {
-                "name": "Speech 3",
-                "type": "Required",
-                "time": "5–7 min",
-                "purpose": "Practice getting to the point quickly and organizing your ideas around a single theme."
-              },
-              {
-                "name": "Speech 4",
-                "type": "Required",
-                "time": "5–7 min",
-                "purpose": "Develop your use of the body in public speaking through gesture, movement, and eye contact."
-              }
-            ]
+          "projects": [
+            {
+              "name": "Inspire Your Audience",
+              "type": "Required",
+              "time": "7–10 min",
+              "purpose": "Craft and deliver a speech designed to motivate your audience to take action or change a belief."
+            },
+            {
+              "name": "Persuasive Influence",
+              "type": "Elective",
+              "time": "5–7 min",
+              "purpose": "Persuade your audience to adopt your viewpoint using evidence, logic, and emotional appeal."
+            },
+            {
+              "name": "The Power of Humor",
+              "type": "Elective",
+              "time": "5–7 min",
+              "purpose": "Incorporate appropriate humor to engage your audience and lighten complex topics."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "name": "Building Skills",
+          "completionRequirement": "Complete 1 required project, 1 elective project, and all enhancement tasks",
+          "enhancement": {
+            "roles": [
+              "Club Officer or Committee Chair activities"
+            ],
+            "notes": ""
           },
-          {
-            "level": 3,
-            "name": "Level 3",
-            "completionRequirement": "Complete all required projects",
-            "enhancement": null,
-            "projects": [
-              {
-                "name": "Speech 5",
-                "type": "Required",
-                "time": "5–7 min",
-                "purpose": "Use vocal variety — including pitch, rate, volume, and pauses — to make your speech more expressive."
-              },
-              {
-                "name": "Speech 6",
-                "type": "Required",
-                "time": "5–7 min",
-                "purpose": "Apply what you have learned about body language and vocal variety in a fully integrated speech."
-              }
-            ]
+          "projects": [
+            {
+              "name": "Leading in Your Volunteer Organization",
+              "type": "Required",
+              "time": "5–7 min",
+              "purpose": "Describe a leadership experience in a volunteer organization and the lessons you learned."
+            },
+            {
+              "name": "Managing a Difficult Audience",
+              "type": "Elective",
+              "time": "12–15 min",
+              "purpose": "Deliver a speech to a deliberately challenging audience and practice managing disruptions professionally."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "name": "Demonstrating Expertise",
+          "completionRequirement": "Complete 2 required projects and all enhancement tasks",
+          "enhancement": {
+            "roles": [
+              "Serve in a club leadership role for at least 6 months"
+            ],
+            "notes": ""
           },
-          {
-            "level": 4,
-            "name": "Level 4",
-            "completionRequirement": "Complete all required projects",
-            "enhancement": null,
-            "projects": [
-              {
-                "name": "Speech 7",
-                "type": "Required",
-                "time": "5–7 min",
-                "purpose": "Research a topic and present your findings in a fact-based, well-organized speech."
-              },
-              {
-                "name": "Speech 8",
-                "type": "Required",
-                "time": "5–7 min",
-                "purpose": "Persuade your audience to agree with your position using logic and evidence."
-              },
-              {
-                "name": "Speech 9",
-                "type": "Required",
-                "time": "5–7 min",
-                "purpose": "Inspire your audience with a speech built around an emotional appeal and a strong call to action."
-              }
-            ]
-          },
-          {
-            "level": 5,
-            "name": "Level 5",
-            "completionRequirement": "Complete all required projects",
-            "enhancement": null,
-            "projects": [
-              {
-                "name": "Speech 10",
-                "type": "Required",
-                "time": "8–10 min",
-                "purpose": "Deliver an inspiring speech that demonstrates your full growth as a communicator."
-              },
-              {
-                "name": "Speech 11",
-                "type": "Required",
-                "time": "8–10 min",
-                "purpose": "Further demonstrate your communication mastery with a speech that showcases your personal style."
-              },
-              {
-                "name": "Speech 12",
-                "type": "Required",
-                "time": "8–10 min",
-                "purpose": "Deliver your capstone speech — a polished presentation that represents the best of your communication skills."
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
-  </script>
-
-  <script>
-    /* ── Data ──────────────────────────────────────────── */
-    const DATA = JSON.parse(document.getElementById('pathways-data').text);
-    const PATHWAYS = DATA.paths;
-
-    /* ── State singleton ────────────────────────────────── */
-    const state = {
-      selectedPath: 'dynamic-leadership',
-      selectedLevel: 0  /* 0-based index into levels[] */
-    };
-
-    function setState(updates) {
-      Object.assign(state, updates);
-      render();
-    }
-
-    /* ── Build functions ────────────────────────────────── */
-
-    function buildProjectCardHTML(project, pathId, levelIndex, projectIndex) {
-      const badgeClass = project.type === 'Required' ? 'badge-required' : 'badge-elective';
-      const cardId = 'card-' + pathId + '-l' + levelIndex + '-p' + projectIndex;
-      return '<div class="project-card" id="' + cardId + '">'
-        + '<div class="project-card-header">'
-        + '<h3 class="project-name">' + project.name + '</h3>'
-        + '<span class="badge ' + badgeClass + '">' + project.type + '</span>'
-        + '</div>'
-        + '<p class="project-time">' + project.time + '</p>'
-        + '<p class="project-purpose">' + project.purpose + '</p>'
-        + '</div>';
-    }
-
-    function buildEnhancementHTML(enhancement, pathId, levelIndex) {
-      if (!enhancement) return '';
-      const rolesHTML = enhancement.roles
-        .map(function(role) { return '<li>' + role + '</li>'; })
-        .join('');
-      const notesHTML = enhancement.notes
-        ? '<p class="enhancement-notes">' + enhancement.notes + '</p>'
-        : '';
-      const titleId = 'enhancement-title-' + pathId + '-l' + levelIndex;
-      return '<section class="enhancement-section" aria-labelledby="' + titleId + '">'
-        + '<h3 class="enhancement-title" id="' + titleId + '">Enhancement</h3>'
-        + '<p class="enhancement-subtitle">Complete these meeting roles during this level:</p>'
-        + '<ul class="enhancement-roles">' + rolesHTML + '</ul>'
-        + notesHTML
-        + '</section>';
-    }
-
-    function buildLevelHTML(level, pathId, levelIndex) {
-      const enhancementHTML = buildEnhancementHTML(level.enhancement, pathId, levelIndex);
-      const cardsHTML = level.projects
-        .map(function(project, i) { return buildProjectCardHTML(project, pathId, levelIndex, i); })
-        .join('');
-      return '<div class="level-header">'
-        + '<h2 class="level-name">Level ' + level.level + ': ' + level.name + '</h2>'
-        + '<p class="level-completion-req">' + level.completionRequirement + '</p>'
-        + '</div>'
-        + enhancementHTML
-        + cardsHTML;
-    }
-
-    function buildTabsHTML(pathData) {
-      return pathData.levels.map(function(level, i) {
-        const tabId = 'tab-' + pathData.id + '-l' + i;
-        const isActive = i === state.selectedLevel;
-        return '<button role="tab"'
-          + ' id="' + tabId + '"'
-          + ' aria-selected="' + (isActive ? 'true' : 'false') + '"'
-          + ' tabindex="' + (isActive ? '0' : '-1') + '"'
-          + ' aria-controls="content-pane"'
-          + ' data-level-index="' + i + '">'
-          + 'Level ' + level.level
-          + '</button>';
-      }).join('');
-    }
-
-    /* ── render(): reads state, writes to DOM once ─────── */
-    function render() {
-      const pathData = PATHWAYS.find(function(p) { return p.id === state.selectedPath; });
-      if (!pathData) return;
-
-      const level = pathData.levels[state.selectedLevel];
-      if (!level) return;
-
-      /* Rebuild tab strip (handles path changes) */
-      document.getElementById('tab-strip').innerHTML = buildTabsHTML(pathData);
-
-      /* Write content (single innerHTML assignment — render-on-demand) */
-      const contentPane = document.getElementById('content-pane');
-      contentPane.innerHTML = buildLevelHTML(level, state.selectedPath, state.selectedLevel);
-
-      /* Update panel ARIA: labelledby must point to the active tab */
-      const activeTabId = 'tab-' + state.selectedPath + '-l' + state.selectedLevel;
-      contentPane.setAttribute('aria-labelledby', activeTabId);
-    }
-
-    /* ── Initial render on page load ─────────────────────── */
-    render();
-
-    /* ── Populate path selector from data ────────────────── */
-    (function populatePathSelector() {
-      const selector = document.getElementById('path-selector');
-      selector.innerHTML = PATHWAYS.map(function(p) {
-        return '<option value="' + p.id + '"'
-          + (p.id === state.selectedPath ? ' selected' : '')
-          + '>' + p.name + '</option>';
-      }).join('');
-    })();
-
-    /* ── Event: path selector change ────────────────────── */
-    document.getElementById('path-selector').addEventListener('change', function(e) {
-      /* Validate: only accept known path IDs (T-03-02) */
-      if (!PATHWAYS.find(function(p) { return p.id === e.target.value; })) return;
-      setState({ selectedPath: e.target.value, selectedLevel: 0 });
-      /* selectedLevel resets to 0 (Level 1) on every path change — NAV-05 */
-    });
-
-    /* ── Event: tab click delegation on stable parent ────── */
-    document.getElementById('tab-strip').addEventListener('click', function(e) {
-      const tab = e.target.closest('[role="tab"]');
-      if (!tab) return;
-      const levelIndex = parseInt(tab.dataset.levelIndex, 10);
-      /* Bounds check (T-03-01) */
-      const pathData = PATHWAYS.find(function(p) { return p.id === state.selectedPath; });
-      if (!pathData || levelIndex < 0 || levelIndex >= pathData.levels.length) return;
-      if (levelIndex === state.selectedLevel) return; /* already active — no re-render */
-      setState({ selectedLevel: levelIndex });
-      /* render() just rebuilt the tab strip via innerHTML — the old `tab` node is detached.
-         Query for the newly created tab element and focus it. */
-      var newTab = document.getElementById('tab-' + state.selectedPath + '-l' + levelIndex);
-      if (newTab) newTab.focus();
-    });
-
-    /* ── Event: keyboard navigation — W3C APG manual activation ── */
-    document.getElementById('tab-strip').addEventListener('keydown', function(e) {
-      const tabs = Array.from(document.querySelectorAll('#tab-strip [role="tab"]'));
-      const currentIndex = tabs.indexOf(document.activeElement);
-      if (currentIndex === -1) return; /* focus not on a tab */
-
-      let newIndex = currentIndex;
-
-      switch (e.key) {
-        case 'ArrowRight':
-          newIndex = (currentIndex + 1) % tabs.length;
-          e.preventDefault();
-          break;
-        case 'ArrowLeft':
-          newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
-          e.preventDefault();
-          break;
-        case 'Home':
-          newIndex = 0;
-          e.preventDefault();
-          break;
-        case 'End':
-          newIndex = tabs.length - 1;
-          e.preventDefault();
-          break;
-        case 'Enter':
-        case ' ': {
-          /* Activate the currently focused tab (manual activation pattern) */
-          var activeLevelIndex = parseInt(tabs[currentIndex].dataset.levelIndex, 10);
-          setState({ selectedLevel: activeLevelIndex });
-          /* render() rebuilt the tab strip; refocus the now-active tab element */
-          var activatedTab = document.getElementById('tab-' + state.selectedPath + '-l' + activeLevelIndex);
-          if (activatedTab) activatedTab.focus();
-          e.preventDefault();
-          return; /* focus stays on the activated tab */
+          "projects": [
+            {
+              "name": "High Performance Leadership",
+              "type": "Required",
+              "time": "Project-based",
+              "purpose": "Plan and execute a significant project for your club or community, then present a report to your club."
+            },
+            {
+              "name": "Prepare to Speak Professionally",
+              "type": "Required",
+              "time": "18–22 min",
+              "purpose": "Develop and deliver a professional-level presentation suitable for an outside audience."
+            }
+          ]
         }
-        default:
-          return; /* let other keys propagate */
+      ]
+    },
+    {
+      "id": "communication-series",
+      "name": "Communication Series",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Introduction to Basic Training",
+          "completionRequirement": "Complete all required projects",
+          "enhancement": null,
+          "projects": [
+            {
+              "name": "Ice Breaker",
+              "type": "Required",
+              "time": "4–6 min",
+              "purpose": "Introduce yourself to your club with a brief prepared speech."
+            },
+            {
+              "name": "Speech 2",
+              "type": "Required",
+              "time": "5–7 min",
+              "purpose": "Deliver a well-organized speech on a topic of your choice using clear transitions and a logical structure."
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "name": "Level 2",
+          "completionRequirement": "Complete all required projects",
+          "enhancement": null,
+          "projects": [
+            {
+              "name": "Speech 3",
+              "type": "Required",
+              "time": "5–7 min",
+              "purpose": "Practice getting to the point quickly and organizing your ideas around a single theme."
+            },
+            {
+              "name": "Speech 4",
+              "type": "Required",
+              "time": "5–7 min",
+              "purpose": "Develop your use of the body in public speaking through gesture, movement, and eye contact."
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "name": "Level 3",
+          "completionRequirement": "Complete all required projects",
+          "enhancement": null,
+          "projects": [
+            {
+              "name": "Speech 5",
+              "type": "Required",
+              "time": "5–7 min",
+              "purpose": "Use vocal variety — including pitch, rate, volume, and pauses — to make your speech more expressive."
+            },
+            {
+              "name": "Speech 6",
+              "type": "Required",
+              "time": "5–7 min",
+              "purpose": "Apply what you have learned about body language and vocal variety in a fully integrated speech."
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "name": "Level 4",
+          "completionRequirement": "Complete all required projects",
+          "enhancement": null,
+          "projects": [
+            {
+              "name": "Speech 7",
+              "type": "Required",
+              "time": "5–7 min",
+              "purpose": "Research a topic and present your findings in a fact-based, well-organized speech."
+            },
+            {
+              "name": "Speech 8",
+              "type": "Required",
+              "time": "5–7 min",
+              "purpose": "Persuade your audience to agree with your position using logic and evidence."
+            },
+            {
+              "name": "Speech 9",
+              "type": "Required",
+              "time": "5–7 min",
+              "purpose": "Inspire your audience with a speech built around an emotional appeal and a strong call to action."
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "name": "Level 5",
+          "completionRequirement": "Complete all required projects",
+          "enhancement": null,
+          "projects": [
+            {
+              "name": "Speech 10",
+              "type": "Required",
+              "time": "8–10 min",
+              "purpose": "Deliver an inspiring speech that demonstrates your full growth as a communicator."
+            },
+            {
+              "name": "Speech 11",
+              "type": "Required",
+              "time": "8–10 min",
+              "purpose": "Further demonstrate your communication mastery with a speech that showcases your personal style."
+            },
+            {
+              "name": "Speech 12",
+              "type": "Required",
+              "time": "8–10 min",
+              "purpose": "Deliver your capstone speech — a polished presentation that represents the best of your communication skills."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<script>
+  /* ── Data ────────────────────────────────────────────── */
+  var _pd = JSON.parse(document.getElementById('pathways-data').text);
+  var PATHWAYS = _pd.paths;
+
+  /* ── State ───────────────────────────────────────────── */
+  var state = {
+    selectedPath: 'dynamic-leadership',
+    selectedLevel: 0
+  };
+
+  function setState(updates) {
+    Object.assign(state, updates);
+    render();
+  }
+
+  /* ── Build functions ─────────────────────────────────── */
+
+  function buildProjectCardHTML(project, pathId, levelIndex, projectIndex) {
+    var badgeClass = project.type === 'Required' ? 'badge-required' : 'badge-elective';
+    var cardId = 'card-' + pathId + '-l' + levelIndex + '-p' + projectIndex;
+    return '<div class="project-card" id="' + cardId + '">'
+      + '<div class="project-card-header">'
+      + '<h3 class="project-name">' + project.name + '</h3>'
+      + '<span class="badge ' + badgeClass + '">' + project.type + '</span>'
+      + '</div>'
+      + '<p class="project-time">' + project.time + '</p>'
+      + '<p class="project-purpose">' + project.purpose + '</p>'
+      + '</div>';
+  }
+
+  function buildEnhancementHTML(enhancement, pathId, levelIndex) {
+    if (!enhancement) return '';
+    var rolesHTML = enhancement.roles
+      .map(function(r) { return '<li>' + r + '</li>'; })
+      .join('');
+    var notesHTML = enhancement.notes
+      ? '<p class="enhancement-notes">' + enhancement.notes + '</p>'
+      : '';
+    var titleId = 'enhancement-title-' + pathId + '-l' + levelIndex;
+    return '<section class="enhancement-section" aria-labelledby="' + titleId + '">'
+      + '<h3 class="enhancement-title" id="' + titleId + '">Enhancement</h3>'
+      + '<p class="enhancement-subtitle">Complete these meeting roles during this level:</p>'
+      + '<ul class="enhancement-roles">' + rolesHTML + '</ul>'
+      + notesHTML
+      + '</section>';
+  }
+
+  function buildLevelHTML(level, pathId, levelIndex) {
+    var enhHTML = buildEnhancementHTML(level.enhancement, pathId, levelIndex);
+    var cardsHTML = level.projects
+      .map(function(p, i) { return buildProjectCardHTML(p, pathId, levelIndex, i); })
+      .join('');
+    return '<div class="level-header">'
+      + '<h2 class="level-name">Level ' + level.level + ': ' + level.name + '</h2>'
+      + '<p class="level-completion-req">' + level.completionRequirement + '</p>'
+      + '</div>'
+      + enhHTML
+      + cardsHTML;
+  }
+
+  function buildTabsHTML(pathData) {
+    return pathData.levels.map(function(level, i) {
+      var tabId = 'tab-' + pathData.id + '-l' + i;
+      var isActive = i === state.selectedLevel;
+      return '<button role="tab"'
+        + ' id="' + tabId + '"'
+        + ' aria-selected="' + (isActive ? 'true' : 'false') + '"'
+        + ' tabindex="' + (isActive ? '0' : '-1') + '"'
+        + ' aria-controls="pathways-content-pane"'
+        + ' data-level-index="' + i + '">'
+        + 'Level ' + level.level
+        + '</button>';
+    }).join('');
+  }
+
+  /* ── render() ────────────────────────────────────────── */
+  function render() {
+    var pathData = PATHWAYS.find(function(p) { return p.id === state.selectedPath; });
+    if (!pathData) return;
+    var level = pathData.levels[state.selectedLevel];
+    if (!level) return;
+
+    document.getElementById('pathways-tab-strip').innerHTML = buildTabsHTML(pathData);
+
+    var pane = document.getElementById('pathways-content-pane');
+    pane.innerHTML = buildLevelHTML(level, state.selectedPath, state.selectedLevel);
+    pane.setAttribute('aria-labelledby', 'tab-' + state.selectedPath + '-l' + state.selectedLevel);
+  }
+
+  /* ── Initial render ──────────────────────────────────── */
+  render();
+
+  /* ── Populate path selector ──────────────────────────── */
+  (function() {
+    var sel = document.getElementById('pathways-path-selector');
+    sel.innerHTML = PATHWAYS.map(function(p) {
+      return '<option value="' + p.id + '"'
+        + (p.id === state.selectedPath ? ' selected' : '')
+        + '>' + p.name + '</option>';
+    }).join('');
+  })();
+
+  /* ── Path selector change ────────────────────────────── */
+  document.getElementById('pathways-path-selector').addEventListener('change', function(e) {
+    if (!PATHWAYS.find(function(p) { return p.id === e.target.value; })) return;
+    setState({ selectedPath: e.target.value, selectedLevel: 0 });
+  });
+
+  /* ── Tab click delegation ────────────────────────────── */
+  document.getElementById('pathways-tab-strip').addEventListener('click', function(e) {
+    var tab = e.target.closest('[role="tab"]');
+    if (!tab) return;
+    var levelIndex = parseInt(tab.dataset.levelIndex, 10);
+    var pathData = PATHWAYS.find(function(p) { return p.id === state.selectedPath; });
+    if (!pathData || levelIndex < 0 || levelIndex >= pathData.levels.length) return;
+    if (levelIndex === state.selectedLevel) return;
+    setState({ selectedLevel: levelIndex });
+    var newTab = document.getElementById('tab-' + state.selectedPath + '-l' + levelIndex);
+    if (newTab) newTab.focus();
+  });
+
+  /* ── Keyboard navigation (W3C APG manual activation) ─── */
+  document.getElementById('pathways-tab-strip').addEventListener('keydown', function(e) {
+    var tabs = Array.from(document.querySelectorAll('#pathways-tab-strip [role="tab"]'));
+    var cur = tabs.indexOf(document.activeElement);
+    if (cur === -1) return;
+    var next = cur;
+    switch (e.key) {
+      case 'ArrowRight': next = (cur + 1) % tabs.length; e.preventDefault(); break;
+      case 'ArrowLeft':  next = (cur - 1 + tabs.length) % tabs.length; e.preventDefault(); break;
+      case 'Home':       next = 0; e.preventDefault(); break;
+      case 'End':        next = tabs.length - 1; e.preventDefault(); break;
+      case 'Enter':
+      case ' ': {
+        var li = parseInt(tabs[cur].dataset.levelIndex, 10);
+        setState({ selectedLevel: li });
+        var at = document.getElementById('tab-' + state.selectedPath + '-l' + li);
+        if (at) at.focus();
+        e.preventDefault();
+        return;
       }
+      default: return;
+    }
+    tabs[next].focus();
+    tabs[next].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  });
 
-      /* Move focus to new tab — does NOT activate it (manual activation) */
-      tabs[newIndex].focus();
-      /* Scroll the tab into view within the horizontal tab strip */
-      tabs[newIndex].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  /* ── FAB: IntersectionObserver on page viewport ──────── */
+  (function() {
+    var sentinel = document.getElementById('pathways-sentinel');
+    var fab      = document.getElementById('pathways-fab');
+    if (!sentinel || !fab) return;
+
+    /* root: null = use browser viewport (FTH page scrolls, not an inner div) */
+    var obs = new IntersectionObserver(function(entries) {
+      fab.hidden = entries[0].isIntersecting;
+    }, { root: null, threshold: 0 });
+
+    obs.observe(sentinel);
+
+    fab.addEventListener('click', function() {
+      document.getElementById('pathways-app').scrollIntoView({ behavior: 'smooth' });
     });
-
-    /* ── FAB: IntersectionObserver + click ───────────────── */
-    (function initFAB() {
-      const sentinel = document.getElementById('scroll-sentinel');
-      const fab = document.getElementById('fab-scroll-top');
-      const contentArea = document.getElementById('content-area');
-
-      if (!sentinel || !fab || !contentArea) return;
-
-      const observer = new IntersectionObserver(function(entries) {
-        /* hidden=true when sentinel is visible (near top) → FAB not needed */
-        /* hidden=false when sentinel scrolls out of view → show FAB */
-        fab.hidden = entries[0].isIntersecting;
-      }, { root: contentArea, threshold: 0 });
-
-      observer.observe(sentinel);
-
-      fab.addEventListener('click', function() {
-        contentArea.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    })();
-  </script>
-</body>
-</html>
+  })();
+</script>
