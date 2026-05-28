@@ -756,7 +756,10 @@
       if (!pathData || levelIndex < 0 || levelIndex >= pathData.levels.length) return;
       if (levelIndex === state.selectedLevel) return; /* already active — no re-render */
       setState({ selectedLevel: levelIndex });
-      tab.focus();
+      /* render() just rebuilt the tab strip via innerHTML — the old `tab` node is detached.
+         Query for the newly created tab element and focus it. */
+      var newTab = document.getElementById('tab-' + state.selectedPath + '-l' + levelIndex);
+      if (newTab) newTab.focus();
     });
 
     /* ── Event: keyboard navigation — W3C APG manual activation ── */
@@ -785,18 +788,24 @@
           e.preventDefault();
           break;
         case 'Enter':
-        case ' ':
+        case ' ': {
           /* Activate the currently focused tab (manual activation pattern) */
-          const activeLevelIndex = parseInt(tabs[currentIndex].dataset.levelIndex, 10);
+          var activeLevelIndex = parseInt(tabs[currentIndex].dataset.levelIndex, 10);
           setState({ selectedLevel: activeLevelIndex });
+          /* render() rebuilt the tab strip; refocus the now-active tab element */
+          var activatedTab = document.getElementById('tab-' + state.selectedPath + '-l' + activeLevelIndex);
+          if (activatedTab) activatedTab.focus();
           e.preventDefault();
-          return; /* focus stays on current tab — no focus movement */
+          return; /* focus stays on the activated tab */
+        }
         default:
           return; /* let other keys propagate */
       }
 
       /* Move focus to new tab — does NOT activate it (manual activation) */
       tabs[newIndex].focus();
+      /* Scroll the tab into view within the horizontal tab strip */
+      tabs[newIndex].scrollIntoView({ block: 'nearest', inline: 'nearest' });
     });
 
     /* ── FAB: IntersectionObserver + click ───────────────── */
