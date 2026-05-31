@@ -4,14 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: context exhaustion at 75% (2026-05-31)
-last_updated: "2026-05-31T00:37:09.176Z"
-last_activity: 2026-05-30 — Phase 2 Plan 02 complete (5 Pathways paths + EVAL_FORMS expansion)
+last_updated: "2026-05-30T00:00:00.000Z"
+last_activity: 2026-05-30 — Phase 2 Plan 03 complete (Basic Training + Communication Series data + BT eval forms)
 progress:
   total_phases: 3
   completed_phases: 1
   total_plans: 6
-  completed_plans: 5
-  percent: 83
+  completed_plans: 6
+  percent: 100
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-05-27)
 ## Current Position
 
 Phase: 2 of 3 (Data)
-Plan: 2 of 4 in current phase
+Plan: 3 of 4 in current phase
 Status: In progress
-Last activity: 2026-05-30 — Phase 2 Plan 02 complete (5 Pathways paths + EVAL_FORMS expansion)
+Last activity: 2026-05-30 — Phase 2 Plan 03 complete (Basic Training + Communication Series data + BT eval forms)
 
-Progress: [███░░░░░░░] 15%
+Progress: [████████░░] 75%
 
 ## Performance Metrics
 
@@ -64,6 +64,9 @@ Recent decisions affecting current work:
 - 02-02: Used expanded multi-line JSON format matching DL style (not compact single-line from temp_data.json)
 - 02-02: Kept non-standard time values (Role-based, Two 3-4 min, etc.) as-is — intentional Toastmasters program designations
 - 02-02: EVAL_FORMS keys must match exact project name strings — renamed 2 wrong keys to match actual project names
+- 02-03: Basic Training and Communication Series use enhancement: null (vintage paths — roles listed as project items)
+- 02-03: BT EVAL_FORMS entries use relative paths (no _B prefix) — local FTH-hosted PDFs
+- 02-03: Basic Training level names confirmed: Developing Your Skills, Building on the Fundamentals, Advancing Your Technique, Mastering the Craft
 
 ### Pending Todos
 
@@ -71,7 +74,7 @@ None.
 
 ### Blockers/Concerns
 
-- **Basic Training level names**: Level 1 is "Introduction to Basic Training"; Levels 2–5 names unknown — will need Base Camp verification in Phase 2. Using "Level 2" etc. as placeholders.
+None.
 
 ### Quick Tasks Completed
 
@@ -90,6 +93,6 @@ Meeting roles and self-evaluations appear as Required items within levels (no se
 
 ## Session Continuity
 
-Last session: 2026-05-31T00:37:09.165Z
-Stopped at: context exhaustion at 75% (2026-05-31)
+Last session: 2026-05-30T00:00:00.000Z
+Stopped at: Completed 02-03-PLAN.md (Basic Training + Communication Series data + BT eval forms)
 Resume file: None
