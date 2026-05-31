@@ -5,13 +5,14 @@ Single HTML file (pathways-app.html) — Toastmasters Pathways reference app.
 Hosted on FTH at 4039.toastmastersclubs.org. All CSS/JS embedded. No frameworks.
 
 ## Current Position
-Phase 2: COMPLETE
-Phase 3: Polish — not started
-Next task: Phase 3 planning
+Phase 2: COMPLETE ✓
+Phase 3: Polish — ready to start
+Next task: Plan Phase 3
 
 ## Last Session
-- 02-04 QA passed — all 8 paths, 40 combinations verified clean
-- Eval forms downloading to /eval-forms/current-paths/
+- All eval forms downloaded to /eval-forms/current-paths/
+- BRIEFING.md created for lean session starts
+- All 8 paths complete and QA verified
 
 ## Key Files
 - pathways-app.html — the app (avoid reading whole file)
