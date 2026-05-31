@@ -57,7 +57,7 @@ Plans:
 - [x] 02-01: Data validation script (R/E counts, time format regex, slug linter, smart-quote detector)
 - [x] 02-02: Transcribe 5 current paths (Engaging Humor, Motivational Strategies, Persuasive Influence, Presentation Mastery, Visionary Communication) × 5 levels + expand EVAL_FORMS
 - [x] 02-03: Transcribe 2 vintage paths (Basic Training, Communication Series) + verify level breakdown against Base Camp
-- [ ] 02-04: Full 40-combination render QA — spot-check R/E classifications against Matrix PDF
+- [x] 02-04: Full 40-combination render QA — spot-check R/E classifications against Matrix PDF
 
 ### Phase 3: Polish
 **Goal**: Production-ready file — verified accessible, correctly sized, and fully deployed to the club FTH website.
@@ -84,7 +84,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/3 | Planned | - |
-| 2. Data | 3/4 | In progress | - |
+| 2. Data | 4/4 | Complete | 2026-05-30 |
 | 3. Polish | 0/3 | Not started | - |
 
 ---
