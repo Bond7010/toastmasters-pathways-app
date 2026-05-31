@@ -4,7 +4,7 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 last_updated: "2026-05-30T18:00:00.000Z"
-last_activity: 2026-05-30 — Phase 2 complete (02-04 render QA passed; HTML shell fix applied)
+last_activity: 2026-05-30 — Added templates/claude-project-starter.md and templates/project-template-guide.md
 progress:
   total_phases: 3
   completed_phases: 2
@@ -81,6 +81,7 @@ None.
 |---|-------------|------|-----------|
 | 260528 | Add local FTH platform reference doc | 2026-05-28 | [260528-fth-local-reference](./.planning/quick/260528-fth-local-reference/) |
 | 260530-rqa | Phase 02 render QA — all 8 paths × 5 levels | 2026-05-30 | [260530-rqa-phase-02-render-qa](./.planning/quick/260530-rqa-phase-02-render-qa/) |
+| 260530-tmpl | Add claude-project-starter + project-template-guide to /templates/ | 2026-05-30 | templates/ |
 
 ### Resolved
 
