@@ -54,7 +54,7 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 02-01: Data validation script (R/E counts, time format regex, slug linter, smart-quote detector)
+- [x] 02-01: Data validation script (R/E counts, time format regex, slug linter, smart-quote detector)
 - [ ] 02-02: Transcribe 6 current paths (Dynamic Leadership, Engaging Humor, Motivational Strategies, Persuasive Influence, Presentation Mastery, Visionary Communication) × 5 levels
 - [ ] 02-03: Transcribe 2 vintage paths (Basic Training, Communication Series) + verify level breakdown against Base Camp
 - [ ] 02-04: Full 40-combination render QA — spot-check R/E classifications against Matrix PDF
@@ -84,7 +84,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/3 | Planned | - |
-| 2. Data | 0/4 | Not started | - |
+| 2. Data | 1/4 | In progress | - |
 | 3. Polish | 0/3 | Not started | - |
 
 ---
