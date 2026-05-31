@@ -738,6 +738,98 @@
   var _pd = JSON.parse(document.getElementById('pathways-data').text);
   var PATHWAYS = _pd.paths;
 
+  /* ── Data validator (call validatePathwaysData() in DevTools console) ── */
+  window.validatePathwaysData = function validatePathwaysData() {
+    var VINTAGE_IDS = ['basic-training', 'communication-series'];
+    // en-dash U+2013 between digits, single space, abbreviated "min"
+    var TIME_FORMAT_RE = /^\d+–\d+ min$/;
+    var SMART_QUOTE_RE = /[“”‘’]/;
+    var violations = [];
+
+    function flag(pathName, levelNum, projectName, message) {
+      violations.push(
+        '[' + pathName + ' > Level ' + levelNum +
+        (projectName ? ' > ' + projectName : '') + '] ' + message
+      );
+    }
+
+    PATHWAYS.forEach(function(path) {
+      var isVintage = VINTAGE_IDS.indexOf(path.id) !== -1;
+
+      // Check path.name for smart quotes
+      if (SMART_QUOTE_RE.test(path.name)) {
+        violations.push('[' + path.name + '] path.name contains smart quotes');
+      }
+
+      path.levels.forEach(function(level) {
+        var levelNum = level.level;
+
+        // Check level.name for smart quotes
+        if (SMART_QUOTE_RE.test(level.name)) {
+          flag(path.name, levelNum, null, 'level.name contains smart quotes: "' + level.name + '"');
+        }
+
+        // Check level.completionRequirement for smart quotes
+        if (level.completionRequirement && SMART_QUOTE_RE.test(level.completionRequirement)) {
+          flag(path.name, levelNum, null, 'level.completionRequirement contains smart quotes');
+        }
+
+        // Check 4: enhancement field
+        if (isVintage) {
+          if (level.enhancement !== null && level.enhancement !== undefined) {
+            flag(path.name, levelNum, null, 'vintage path must have null enhancement but got non-null');
+          }
+        } else {
+          if (level.enhancement === null || level.enhancement === undefined) {
+            flag(path.name, levelNum, null, 'current path must have non-null enhancement but got null/undefined');
+          }
+        }
+
+        // Check 5: duplicate project names within path+level
+        var seen = {};
+        level.projects.forEach(function(project) {
+          if (seen[project.name]) {
+            flag(path.name, levelNum, project.name, 'duplicate project name');
+          }
+          seen[project.name] = true;
+
+          // Check 1: time format
+          if (!TIME_FORMAT_RE.test(project.time)) {
+            flag(path.name, levelNum, project.name,
+              'invalid time format: "' + project.time + '" (expected "N–N min")');
+          }
+
+          // Check 2: type enum
+          if (project.type !== 'Required' && project.type !== 'Elective') {
+            flag(path.name, levelNum, project.name,
+              'invalid type: "' + project.type + '" (must be "Required" or "Elective")');
+          }
+
+          // Check 3: smart quotes in project fields
+          if (SMART_QUOTE_RE.test(project.name)) {
+            flag(path.name, levelNum, project.name, 'project.name contains smart quotes');
+          }
+          if (SMART_QUOTE_RE.test(project.time)) {
+            flag(path.name, levelNum, project.name, 'project.time contains smart quotes');
+          }
+          if (project.purpose && SMART_QUOTE_RE.test(project.purpose)) {
+            flag(path.name, levelNum, project.name, 'project.purpose contains smart quotes');
+          }
+        });
+      });
+    });
+
+    if (violations.length === 0) {
+      console.log('%c PATHWAYS DATA: PASS ', 'background:#004165;color:#fff;font-weight:bold;font-size:14px;');
+      console.log('All ' + PATHWAYS.length + ' paths validated — no violations found.');
+    } else {
+      console.log('%c PATHWAYS DATA: FAIL ', 'background:#772432;color:#fff;font-weight:bold;font-size:14px;');
+      console.log(violations.length + ' violation(s) found:');
+      violations.forEach(function(v) { console.warn(v); });
+    }
+    return violations;
+  };
+
   /* ── State ───────────────────────────────────────────── */
   var state = {
     selectedPath: 'dynamic-leadership',
