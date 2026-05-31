@@ -2,8 +2,12 @@
 
 ## The 3 Files You Need
 
-### 1. BRIEFING.md (read every session — keep under 30 lines)
 ---
+
+### 1. BRIEFING.md
+*(Read every session — keep under 30 lines)*
+
+```
 # BRIEFING
 
 ## Project
@@ -29,10 +33,14 @@ Project just initialized.
 - Update BRIEFING.md at end of every session
 - One task per session
 - Commit after every completed task
+```
+
 ---
 
-### 2. CLAUDE.md (read only for architectural questions)
----
+### 2. CLAUDE.md
+*(Read only for architectural questions)*
+
+```
 # Project Context
 
 ## What This Is
@@ -56,10 +64,14 @@ Project just initialized.
 | File | Purpose |
 |---|---|
 | [file] | [what it does] |
+```
+
 ---
 
-### 3. HANDOFF.md (emergency recovery — update at 50% context)
----
+### 3. HANDOFF.md
+*(Emergency recovery — update at 50% context)*
+
+```
 # Handoff
 
 ## Date
@@ -79,18 +91,79 @@ Project just initialized.
 
 ## Known Blockers
 [Anything needing human action]
+```
+
 ---
 
 ## Session Prompt Pattern
 
-Every session:
-Assistant: [Read BRIEFING.md]
-Then: [Read HANDOFF.md if continuing emergency state]
-Then: [Start work via /gsd-quick or /gsd-execute-phase]
+Every session starts with:
+```
+Read BRIEFING.md only.
+[one specific task]
+Do not read [large files] in full — grep if needed.
+Update BRIEFING.md when done.
+Commit: "[description]"
+Stop and report.
+```
 
+---
 
-## Why This Works
+## At 50% Context Warning
 
-- **BRIEFING.md** = fast orientation (30 lines, read every session)
-- **CLAUDE.md** = deep context (read on-demand only)
-- **HANDOFF.md** = emergency recovery (50% context trigger)
+Paste this immediately:
+```
+Context getting full. Before stopping:
+1. Update BRIEFING.md — current position and next step
+2. Update HANDOFF.md — full recovery context
+3. Commit everything: "Session checkpoint — [what was done]"
+4. Push to GitHub
+5. Stop
+```
+
+---
+
+## After Crash or Cutoff
+
+```
+Read BRIEFING.md only.
+Resume from: [next task in BRIEFING.md]
+Do not redo completed work.
+Check file state before assuming anything.
+```
+
+---
+
+## Golden Rules
+
+| Rule | Why |
+|---|---|
+| One task per session | Prevents context blowout |
+| Read BRIEFING.md only | Saves 20-40% tokens |
+| Grep don't read | Large files kill context fast |
+| Commit every task | Nothing lost if session dies |
+| Update BRIEFING.md every session | Free continuity |
+| Fresh session each task | Clean whiteboard = full capacity |
+| Update HANDOFF.md at 50% | Your safety net |
+
+---
+
+## File Size Targets
+
+| File | Max lines | Why |
+|---|---|---|
+| BRIEFING.md | 30 | Read every session |
+| CLAUDE.md | 200 | Read rarely |
+| HANDOFF.md | 100 | Emergency only |
+| Main deliverable | Any | Never read in full |
+
+---
+
+## New Project Checklist
+
+- [ ] Fill in BRIEFING.md
+- [ ] Fill in CLAUDE.md  
+- [ ] Fill in HANDOFF.md
+- [ ] Initialize git repo
+- [ ] First commit: "Project initialized"
+- [ ] Start Claude Code: "Read BRIEFING.md only."
