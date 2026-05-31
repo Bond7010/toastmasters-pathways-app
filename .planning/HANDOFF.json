@@ -1,0 +1,35 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-05-31T00:45:00.000Z",
+  "phase": "02",
+  "phase_name": "Data",
+  "phase_dir": ".planning/phases/02-data",
+  "plan": 3,
+  "task": 0,
+  "total_tasks": 3,
+  "status": "paused",
+  "completed_tasks": [
+    {"id": "02-01", "name": "validatePathwaysData() console validator", "status": "done", "commit": "d2cab69"},
+    {"id": "02-02", "name": "Add 5 current paths + expand EVAL_FORMS", "status": "done", "commit": "5fd7120"}
+  ],
+  "remaining_tasks": [
+    {"id": "02-03", "name": "Add both vintage paths (Basic Training + Communication Series)", "status": "not_started", "note": "PLAN FILE ALREADY WRITTEN at .planning/phases/02-data/02-03-PLAN.md — just spawn gsd-executor"},
+    {"id": "02-04", "name": "Full 40-combination render QA", "status": "not_started"}
+  ],
+  "blockers": [],
+  "human_actions_pending": [],
+  "decisions": [
+    {"decision": "Time format violations kept as-is", "rationale": "Role-based, Two 3-4 min, Self-evaluation, etc. are legitimate Toastmasters designations, not data errors", "phase": "02"},
+    {"decision": "What Did You Get Out of It? added to BT Level 5 as Required/Written project", "rationale": "No pathCompletion schema field — Level 5 is natural home; user listed it explicitly", "phase": "02"},
+    {"decision": "CS L4/L5 Introduction items added as Required/Self-study projects", "rationale": "User explicitly listed them in the level structure in their message", "phase": "02"},
+    {"decision": "Basic Training eval forms use relative paths not _B base URL", "rationale": "These are local PDFs in eval-forms/basic-training/, not hosted on westpinestoastmasters", "phase": "02"}
+  ],
+  "uncommitted_files": [
+    ".planning/STATE.md",
+    ".planning/phases/02-data/02-01-PLAN.md",
+    ".planning/phases/02-data/02-02-PLAN.md",
+    ".planning/phases/02-data/02-03-PLAN.md"
+  ],
+  "next_action": "Execute plan 02-03 by spawning gsd-executor with the plan at .planning/phases/02-data/02-03-PLAN.md. The plan contains all data for both vintage paths. Then commit uncommitted plan files.",
+  "context_notes": "Session ended at 75% context. All 5 current paths are live in pathways-app.html. Communication Series has placeholder stub data (Speech 2, Speech 3...) that 02-03 must fully replace. Basic Training is not yet in the HTML at all — 02-03 inserts it before communication-series. The EVAL_FORMS now has 51 entries. Dynamic Leadership still has Phase 1 placeholder project data (L3 has a project named Persuasive Influence, L5 has Project-based time) — this is acceptable for now, will be caught in 02-04 QA."
+}
