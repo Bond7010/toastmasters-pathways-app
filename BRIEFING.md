@@ -6,10 +6,11 @@ Hosted on FTH at 4039.toastmastersclubs.org. All CSS/JS embedded. No frameworks.
 
 ## Current Position
 Phase 2: COMPLETE ✓
-Minification: COMPLETE ✓ (57,194 chars — 8,339 under FTH 65,533 limit)
-Phase 3: Polish — ready to start
+Minification: COMPLETE ✓ (64,964 chars — 569 under FTH 65,533 limit)
+Phase 3: Polish — in progress
 Eval forms: All 66 current-path PDFs wired up in EVAL_FORMS (13 new entries added 2026-05-31)
-Next task: Upload pathways-app.html to FTH and test eval form links
+Footer fix: in progress — replacing footer tag with div
+Next task: Test footer visibility on FTH after upload
 
 ## Last Session (2026-05-31)
 - Minified pathways-app.html from 118,980 → 57,194 chars (now 58,101 after eval forms)
@@ -19,6 +20,9 @@ Next task: Upload pathways-app.html to FTH and test eval form links
 - Badge display decodes R/E back to "Required"/"Elective" for users
 - Backup saved as pathways-app.full.html (original readable source)
 - Committed and pushed (69c3840)
+- Fixed footer modal bleed: added #pathways-modal footer{display:none!important} to CSS
+- Fixed corrupted unicode in footer (u{1F514}, u{2014}, u{2019} → proper UTF-8)
+- Removed bell emoji from footer to save chars (8ce3a1b)
 
 ## Key Files
 - pathways-app.html — minified app for FTH upload (57,194 chars)
