@@ -8,10 +8,11 @@ Hosted on FTH at 4039.toastmastersclubs.org. All CSS/JS embedded. No frameworks.
 Phase 2: COMPLETE ✓
 Minification: COMPLETE ✓ (57,194 chars — 8,339 under FTH 65,533 limit)
 Phase 3: Polish — ready to start
-Next task: Upload pathways-app.html to FTH and smoke-test live, then plan Phase 3
+Eval forms: All 66 current-path PDFs wired up in EVAL_FORMS (13 new entries added 2026-05-31)
+Next task: Upload pathways-app.html to FTH and test eval form links
 
 ## Last Session (2026-05-31)
-- Minified pathways-app.html from 118,980 → 57,194 chars
+- Minified pathways-app.html from 118,980 → 57,194 chars (now 58,101 after eval forms)
 - Techniques: CSS/JS comment strip, terser, JSON key renames (name→n etc.),
   type values Required→R/Elective→E, purpose deduplication (244→105 unique, pL lookup)
 - validatePathwaysData() intact and uses renamed fields
