@@ -9,8 +9,8 @@ Phase 2: COMPLETE ✓
 Minification: COMPLETE ✓ (64,964 chars — 569 under FTH 65,533 limit)
 Phase 3: Polish — in progress
 Eval forms: All 66 current-path PDFs wired up in EVAL_FORMS (13 new entries added 2026-05-31)
-Footer fix: in progress — replacing footer tag with div
-Next task: Test footer visibility on FTH after upload
+Footer fix: COMPLETE (df2ba0e) — replaced <footer> tag with <div style="display:block!important;...">
+Next task: Upload pathways-app.html to FTH and verify footer is visible
 
 ## Last Session (2026-05-31)
 - Minified pathways-app.html from 118,980 → 57,194 chars (now 58,101 after eval forms)
